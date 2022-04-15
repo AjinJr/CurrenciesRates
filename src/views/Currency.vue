@@ -11,7 +11,7 @@
   </select>
 
   <div class="w-full flex justify-center p-20 text-center">
-    <div class="min-w-[50%] p-10 border-2 border-gray-800 rounded-md shadow-md">
+    <div class="values min-w-[50%] p-10 border-2 border-gray-800 rounded-md">
       <h1 class="p-2 text-3xl font-bold">
         {{ value.name }}
       </h1>
@@ -61,3 +61,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.values {
+  box-shadow: 20px 20px 10px;
+}
+</style>

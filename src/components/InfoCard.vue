@@ -4,7 +4,8 @@
   >
     <button
       class="max-w-fit justify-self-end border-2 p-2 hover:bg-gray-800 hover:text-orange-500 hover:border-orange-500"
-      @click.stop="removeCard"
+      @click.stop="removeCard()"
+      @click="changeValue"
     >
       x
     </button>
@@ -20,7 +21,6 @@ export default {
   data() {
     return {
       info: {},
-      flag: true,
       interval: null,
     };
   },
@@ -35,6 +35,8 @@ export default {
   methods: {
     removeCard() {
       this.$store.commit("REMOVE_CARD", this.index);
+    },
+    changeValue() {
       this.$emit("changeIsShown", this.index);
     },
     async updateData() {

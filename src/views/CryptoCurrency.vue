@@ -13,7 +13,7 @@
   </div>
   <div class="p-8 grid grid-cols-2 gap-8 ;">
     <!--Left col -->
-    <div class="left_col">
+    <div v-if="length > 0" class="left_col">
       <hr class="border-gray-800" />
       <div class="max-h-[32rem] overflow-y-scroll">
         <section class="grid gap-5 grid-cols-3 grid-rows-3 p-2">
@@ -66,20 +66,19 @@ export default {
       this.inputValue = "";
     },
     toggle(index) {
+      console.log("button was pressed");
+      console.log(this.currentIndex, index);
       if (this.currentIndex === index) {
         this.isShown = false;
         this.currentIndex = null;
-        return;
+      } else {
+        this.currentIndex = index;
+        this.isShown = true;
       }
-      this.currentIndex = index;
-      this.isShown = true;
     },
-    // changeIsShown() {
-    //   this.isShown = false;
-    //   this.currentIndex = null;
-    // },
   },
 };
+//
 </script>
 
 <style scoped></style>

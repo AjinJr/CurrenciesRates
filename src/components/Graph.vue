@@ -60,11 +60,13 @@ export default {
     },
   },
   created() {
+    console.log(1);
     this.interval = setInterval(this.getPrice, 3000);
   },
   unmounted() {
     this.prices = [];
     clearInterval(this.interval);
+    console.log(-1);
   },
 };
 </script>
