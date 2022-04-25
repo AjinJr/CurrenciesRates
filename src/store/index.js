@@ -8,6 +8,14 @@ function getInfo(name){
     })
 }
 
+function getAllCoins(){
+  return fetch(`https://min-api.cryptocompare.com/data/all/coinlist?summary=true`)
+    .then((response) =>{
+      return response.json()
+    })
+}
+
+
 function getPaperMoney(){
   return fetch('https://api.getgeoapi.com/v2/currency/list?api_key=7f6727409f793f1845fce5e2463dfccf399f1b64&format=json')
     .then((response) => {
@@ -24,8 +32,9 @@ function getPaperValue(payload){
 
 export default createStore({
   state: {
-    cards: [],
-    currencies: [], 
+    cards: [], // info for cards 
+    coins: [], // for all coins 
+    currencies: [], // for paper money 
     value: {}
   },
   getters: {
@@ -51,17 +60,41 @@ export default createStore({
       }
       state.cards.push(payload)
     }, 
+    SET_NAMES(state, payload){
+      state.coins = payload
+    },
+
     SET_MONEY(state, payload){
       state.currencies = payload
     },
+
     SET_VALUE(state, payload){
       state.value = payload
     },
+
     REMOVE_CARD(state, payload){
-        state.cards = state.cards.filter(( item, index) => index != payload - 1)
+        state.cards = state.cards.filter(( item) => item['name'] != payload)
+    }, 
+
+    CLEAR_CARDS(state){
+      // console.log(state.cards)
+      // state.cards = state.cards.filter(item => item === 'abracadabra')
+      // console.log(state.cards)
+      state.cards = []
     }
   },
   actions: {
+    async getAllCoins({commit}){
+      try {
+        const coins = await getAllCoins()
+        // console.log(Object.keys(coins['Data']))
+        commit('SET_NAMES', Object.keys(coins['Data']))
+
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
     async getInfo({commit}, name){
       try{
         const price = await getInfo(name)
@@ -73,6 +106,7 @@ export default createStore({
         console.error(error)
       }
     },
+
     async getPaperMoney({commit}){
       try{
         const arr = await getPaperMoney()
@@ -83,11 +117,10 @@ export default createStore({
         console.error(error)
       }
     }, 
+
     async getPaperValue({commit}, payload){
       try {
         const value = await getPaperValue(payload)
-        console.log(value)
-        console.log(value.rates['RUB'].rate)
         const info = {'code': value.base_currency_code, 'name': value.base_currency_name, 'rates': value.rates['RUB'].rate}
         commit('SET_VALUE', info)
       } catch (error) {

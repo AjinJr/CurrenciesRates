@@ -9,8 +9,10 @@
     >
       x
     </button>
-    <h1>{{ cards[index - 1]["name"] }}</h1>
-    <h2>{{ cards[index - 1]["price"] }}</h2>
+    <!-- <h1>{{ cards[index - 1]["name"] }}</h1>
+    <h2>{{ cards[index - 1]["price"] }}</h2> -->
+    <h1>{{ item["name"] }}</h1>
+    <h2>{{ item["price"] }}</h2>
   </div>
 </template>
 
@@ -31,24 +33,24 @@ export default {
   },
   props: {
     index: Number,
+    item: Object,
   },
   methods: {
     removeCard() {
-      this.$store.commit("REMOVE_CARD", this.index);
+      this.$emit("removeCard", this.item["name"]);
+      this.$store.commit("REMOVE_CARD", this.item["name"]);
     },
     changeValue() {
-      this.$emit("changeIsShown", this.index);
+      this.$emit("changeIsShown");
     },
-    async updateData() {
-      await this.$store.dispatch("getInfo", this.cards[this.index - 1]["name"]);
-    },
+    // async updateData() {
+    //   await this.$store.dispatch("getInfo", this.cards[this.index - 1]["name"]);
+    // },
   },
-  created() {
-    this.interval = setInterval(this.updateData, 3000);
-  },
+  created() {},
 
   unmounted() {
-    clearInterval(this.interval);
+    this.$store.commit("REMOVE_CARD", this.item["name"]);
   },
 };
 </script>
