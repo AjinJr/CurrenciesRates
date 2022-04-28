@@ -16,7 +16,7 @@
             {{ item["rates"] }}
           </div>
         </div>
-        <div class="">z</div>
+        <div class="">diff</div>
       </div>
     </section>
     <section
