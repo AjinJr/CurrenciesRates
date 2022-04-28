@@ -1,7 +1,6 @@
 <template>
-  <div class="left_col">
-    <hr class="border-gray-800" />
-    <div class="max-h-[32rem] overflow-y-scroll">
+  <div class="left_col bg-white rounded-md border border-white w-full">
+    <div class="">
       <section class="grid gap-5 grid-cols-3 grid-rows-3 p-2">
         <InfoCard
           v-for="(item, index) in cards"
@@ -16,7 +15,6 @@
         />
       </section>
     </div>
-    <hr class="border-gray-800" />
   </div>
 </template>
 

@@ -1,34 +1,11 @@
 <template>
-  <div>
-    <select
-      v-model="selected"
-      class="form-select block w-full border p-3 rounded"
-      @change="onChange"
-    >
-      <option :value="null" disabled>Select currency</option>
-      <option v-for="(item, index) in currencies" :key="index">
-        {{ currencies[index][1] }}
-      </option>
-    </select>
-
-    <div class="w-full flex justify-center p-20 text-center">
-      <div class="values min-w-[50%] p-10 border-2 border-gray-800 rounded-md">
-        <h1 class="p-2 text-3xl font-bold">
-          {{ value.name }}
-        </h1>
-        <h1 class="p-2 text-2xl font-semibold">
-          {{ value.code }}
-        </h1>
-        <p class="p-2 text-2xl font-semibold">
-          {{ value.rates }}
-        </p>
-      </div>
-    </div>
-  </div>
+  <CurrencyBox></CurrencyBox>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import CurrencyBox from "@/components/currency/CurrencyBox.vue";
+
 export default {
   name: "Currency",
   data() {
@@ -37,13 +14,14 @@ export default {
       currencyIndex: 0,
     };
   },
+  components: { CurrencyBox },
   computed: {
     ...mapState({
       currencies: (state) => state.currencies,
       value: (state) => state.value,
     }),
   },
-  components: {},
+  components: { CurrencyBox },
   methods: {
     onChange() {
       for (let index = 0; index < this.currencies.length; ++index) {
@@ -59,7 +37,7 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch("getPaperMoney");
+    // this.$store.dispatch("getPaperMoney");
   },
 };
 </script>

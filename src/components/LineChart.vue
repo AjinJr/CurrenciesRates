@@ -1,5 +1,5 @@
 <template>
-  <canvas id="canvas" width="650" height="400"> </canvas>
+  <canvas id="canvas" class="w-full h-full"> </canvas>
 </template>
 <script>
 import { Line } from "vue-chartjs";
@@ -10,6 +10,7 @@ export default {
     return {
       interval: null,
       ctx: null,
+      canvas: null,
       chart: null,
       config: {},
     };
@@ -17,10 +18,6 @@ export default {
   props: {
     chartData: {
       type: Array,
-      default: null,
-    },
-    options: {
-      type: Object,
       default: null,
     },
   },
@@ -69,12 +66,6 @@ export default {
               display: false, // Hide X axis labels
             },
           },
-          //   scales: {
-          //     y: {
-          //       suggestedMin: 4000,
-          //       suggestedMax: 40000,
-          //     },
-          //   },
         },
       };
     },
@@ -82,17 +73,21 @@ export default {
   mounted() {
     Chart.register(...registerables);
     this.registerConfig();
-    this.ctx = document.getElementById("canvas").getContext("2d");
-    this.chart = new Chart(this.ctx, this.config);
+    this.canvas = document.getElementById("canvas");
+    this.ctx = this.canvas.getContext("2d");
+    this.chart = new Chart(this.canvas, this.config);
   },
-  unmounted() {},
+  unmounted() {
+    // this.ctx = clearRect(0, 0, this.canvas.width, this.canvas.heigth);
+    // this.chart.destroy();
+  },
   watch: {
     chartData: {
       handler: function () {
         console.log("Im here");
         this.registerConfig();
         this.chart.destroy();
-        this.chart = new Chart(this.ctx, this.config);
+        this.chart = new Chart(this.canvas, this.config);
       },
       deep: true,
     },

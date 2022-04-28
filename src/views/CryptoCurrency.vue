@@ -1,44 +1,56 @@
 <template>
-  <div class="justify-center">
-    <form
-      action=""
-      class="3 justify-items-center p-4 text-center text-xl"
-      @submit.prevent="onSubmit"
-    >
-      <input
-        type="text"
-        class="border-2 rounded-md"
-        v-model="inputValue"
-        placeholder="Название валюты:"
-        @keyup="getHints"
-        @keydown="watchInput"
-      />
-      <button class="hover:text-orange-400 text-2xl p-1" @click="addCard">
-        <i class="fa fa-plus-square fa-lg"></i>
-      </button>
-      <br />
-      <label for="3" v-if="flag && values.length != 0" class="text-red-500"
-        >This card is already added</label
+  <div class="z-50">
+    <div class="justify-center">
+      <form
+        action=""
+        class="3 justify-items-center p-4 text-center text-xl"
+        @submit.prevent="onSubmit"
       >
-      <Hints
-        v-if="inputValue.trim() != '' && values.length > 0"
-        :names="hints"
-        @addCard="addHint"
-      />
-    </form>
-  </div>
-  <div class="p-8 grid grid-cols-2 gap-8 ;">
-    <!--Left col -->
-    <div v-if="values.length > 0" class="left_col">
-      <CardsHolder
-        :inputValues="values"
-        @removeCard="removeCard"
-        @showGraph="showGraph"
-        @changeIsShown="changeIsShown"
-      />
+        <input
+          type="text"
+          class="border-2 rounded-md"
+          v-model="inputValue"
+          placeholder="Название валюты:"
+          @keyup="getHints"
+          @keydown="watchInput"
+        />
+        <button class="hover:text-orange-400 text-2xl p-1" @click="addCard">
+          <i class="fa fa-plus-square fa-lg"></i>
+        </button>
+        <br />
+        <label for="3" v-if="flag && values.length != 0" class="text-red-500"
+          >This card is already added</label
+        >
+        <Hints
+          v-if="inputValue.trim() != '' && values.length > 0"
+          :names="hints"
+          @addCard="addHint"
+        />
+      </form>
     </div>
-    <!--Right col -->
-    <Graph v-if="isShown" :index="currentIndex" :options="chartOptions" />
+    <div class="p-12 flex justify-center relative">
+      <div v-if="values.length > 0" class="left_col w-1/2">
+        <CardsHolder
+          :inputValues="values"
+          @removeCard="removeCard"
+          @showGraph="showGraph"
+          @changeIsShown="changeIsShown"
+        />
+      </div>
+    </div>
+    <div
+      class="absolute top-0 left-0 min-h-full w-full flex justify-center items-center"
+      v-if="isShown"
+    >
+      <div class="absolute bg-black/[.5] w-screen h-screen z-10"></div>
+      <!-- <span tabindex="0" aria-hidden="true"></span> -->
+      <Modal
+        class="absolute top-48 z-50"
+        :index="currentIndex"
+        :options="chartOptions"
+      />
+      <!-- <span tabindex="0" aria-hidden="true"></span> -->
+    </div>
   </div>
 </template>
 
@@ -46,7 +58,7 @@
 import CardsHolder from "@/components/CardsHolder";
 import InfoCard from "@/components/InfoCard.vue";
 import Hints from "@/components/Hints.vue";
-import Graph from "@/components/Graph.vue";
+import Modal from "@/components/Modal.vue";
 import { mapGetters } from "vuex";
 import { mapState } from "vuex";
 
@@ -69,8 +81,9 @@ export default {
 
   components: {
     CardsHolder,
+    Modal,
     InfoCard,
-    Graph,
+
     Hints,
   },
   computed: {
@@ -138,4 +151,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.left_col {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+}
+</style>

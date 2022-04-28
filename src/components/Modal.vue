@@ -1,18 +1,11 @@
 <template>
-  <section class="grid grid-row-2 text-center">
+  <section class="grid grid-row-2 text-center bg-white">
     <div class="flex flex-col justify-around">
+      <button class="self-end p-4 border rounded-md">x</button>
       <h1 class="text-2xl font-bold">{{ cards[index]["name"] }}</h1>
-      <p class="text-2xl font-medium">{{ cards[index]["price"] }}</p>
+      <!-- <p class="text-2xl font-medium">{{ cards[index]["price"] }}</p> -->
     </div>
-    <!-- <div class="flex items-end border-gray-600 border-b border-l h-64 self-end">
-      <div
-        v-for="(item, index) in showPrices()"
-        :key="index"
-        :style="{ height: ` ${item}%` }"
-        class="bg-orange-500 border w-10 h-24"
-      ></div>
-    </div> -->
-    <LineChart :chartData="prices" :options="options" />
+    <LineChart :chartData="prices" />
   </section>
 </template>
 
@@ -21,15 +14,11 @@ import { mapState } from "vuex";
 import LineChart from "@/components/LineChart.vue";
 
 export default {
-  name: "Graph",
+  name: "Modal",
   data() {
     return {
       prices: [],
       interval: null,
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-      },
     };
   },
   props: {

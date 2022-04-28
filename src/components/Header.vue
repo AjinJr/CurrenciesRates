@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="flex justify-between align-center bg-gray-800 p-2">
+    <nav class="flex justify-between align-center bg-transparent p-2">
       <div>
         <i class="fa-solid fa-shekel-sign fa-3x text-orange-500"></i>
       </div>

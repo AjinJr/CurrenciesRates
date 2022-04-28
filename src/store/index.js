@@ -1,40 +1,16 @@
 import { createStore } from 'vuex'
+import {getAllCoins} from '@/API/allCoins'
+import {getInfo} from '@/API/getCardInfo'
+import {getPaperMoney} from '@/API/getPaperValues'
+import {getPaperValue, getHistValue} from '@/API/getCurrentPaperValue'
 
-
-function getInfo(name){
-  return fetch(`https://min-api.cryptocompare.com/data/price?fsym=${name}&tsyms=USD&api_key=339fc8c0f96cb3a3b548f7c3bea4c7e35eda66a5bb026d8c81b65eff2ffe2e07`)
-    .then((response) =>{
-      return response.json()
-    })
-}
-
-function getAllCoins(){
-  return fetch(`https://min-api.cryptocompare.com/data/all/coinlist?summary=true`)
-    .then((response) =>{
-      return response.json()
-    })
-}
-
-
-function getPaperMoney(){
-  return fetch('https://api.getgeoapi.com/v2/currency/list?api_key=7f6727409f793f1845fce5e2463dfccf399f1b64&format=json')
-    .then((response) => {
-      return response.json()
-    })
-}
-
-function getPaperValue(payload){
-  return fetch(`https://api.getgeoapi.com/v2/currency/convert?api_key=7f6727409f793f1845fce5e2463dfccf399f1b64&from=${payload}&to=RUB`)
-    .then((response) => {
-      return response.json()
-    })
-}
 
 export default createStore({
   state: {
     cards: [], // info for cards 
     coins: [], // for all coins 
     currencies: [], // for paper money 
+    histValues: [],
     value: {}
   },
   getters: {
@@ -71,15 +47,15 @@ export default createStore({
     SET_VALUE(state, payload){
       state.value = payload
     },
-
+    SET_HIST(state, payload){
+      state.histValues = payload
+      console.log(state.histValues)
+    },
     REMOVE_CARD(state, payload){
         state.cards = state.cards.filter(( item) => item['name'] != payload)
     }, 
 
     CLEAR_CARDS(state){
-      // console.log(state.cards)
-      // state.cards = state.cards.filter(item => item === 'abracadabra')
-      // console.log(state.cards)
       state.cards = []
     }
   },
@@ -87,11 +63,10 @@ export default createStore({
     async getAllCoins({commit}){
       try {
         const coins = await getAllCoins()
-        // console.log(Object.keys(coins['Data']))
         commit('SET_NAMES', Object.keys(coins['Data']))
 
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     },
 
@@ -111,7 +86,7 @@ export default createStore({
       try{
         const arr = await getPaperMoney()
         let info = Object.entries(arr.currencies)
-        commit('SET_MONEY', info)
+        commit('SET_MONEY', info) 
       }
       catch(error){
         console.error(error)
@@ -120,9 +95,25 @@ export default createStore({
 
     async getPaperValue({commit}, payload){
       try {
+        console.log(payload)
         const value = await getPaperValue(payload)
-        const info = {'code': value.base_currency_code, 'name': value.base_currency_name, 'rates': value.rates['RUB'].rate}
+        const info = {'code': value.base_currency_code, 'name': value.base_currency_name, 'rates': value.rates[payload[1]].rate}
+        console.log(info)
         commit('SET_VALUE', info)
+      } catch (error) {
+        console.error(error)
+      }
+    }, 
+    async getHistCurrency({commit}, payload){
+      console.log(payload)
+      try {
+        let result =[]
+        for(let i = 0; i < payload['dates'].length; ++i){
+          const value = await getHistValue(payload['dates'][i], payload['value'])
+          const info = {'date': value.updated_date, 'rates': value.rates.RUB.rate}
+          result.push(info)
+        }
+        commit('SET_HIST', result)
       } catch (error) {
         console.error(error)
       }
