@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-full justify-center gap-x-4">
-    <section class="h-96 w-2/4 border-2 bg-white/[.7]">
+    <section class="h-96 w-2/4 border-2 bg-white/[.7] backdrop-blur-md">
       <div
         class="grid grid-cols-3 content-center justify-items-center self-center gap-x-16 pt-12"
       >
@@ -20,7 +20,7 @@
       </div>
     </section>
     <section
-      class="h-96 w-1/4 border-2 bg-white/[.7] flex text-xl justify-around"
+      class="h-96 w-1/4 border-2 bg-white/[.7] flex text-xl justify-around backdrop-blur-md"
     >
       <div class="flex flex-col justify-around gap-y-8">
         <p>USD</p>
