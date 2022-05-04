@@ -28,28 +28,36 @@
         />
       </form>
     </div>
-    <div class="p-12 flex justify-center relative">
-      <div v-if="values.length > 0" class="left_col w-1/2">
+    <div class="p-12 flex flex-col items-center justify-center relative">
+      <div v-if="values.length > 0" class="w-1/2 bg-white/[.7]">
         <CardsHolder
+          :currentIndex="currentIndex"
           :inputValues="values"
+          :currentPage="currentPage"
           @removeCard="removeCard"
           @showGraph="showGraph"
-          @changeIsShown="changeIsShown"
+          @getNextPage="hasNextPage"
         />
+      </div>
+      <div class="buttons flex p-4 text-white gap-x-12">
+        <button @click="currentPage--" v-if="currentPage > 1">
+          <i class="fa-solid fa-angle-left fa-xl"></i>
+        </button>
+        <button @click="currentPage++" v-if="nextPage">
+          <i class="fa-solid fa-angle-right fa-xl"></i>
+        </button>
       </div>
     </div>
     <div
       class="absolute top-0 left-0 min-h-full w-full flex justify-center items-center"
-      v-if="isShown"
+      v-if="currentIndex != null"
     >
       <div class="absolute bg-black/[.5] w-screen h-screen z-10"></div>
-      <!-- <span tabindex="0" aria-hidden="true"></span> -->
       <Modal
         class="absolute top-48 z-50"
         :index="currentIndex"
-        :options="chartOptions"
+        @closeModal="closeModal"
       />
-      <!-- <span tabindex="0" aria-hidden="true"></span> -->
     </div>
   </div>
 </template>
@@ -67,15 +75,12 @@ export default {
   data() {
     return {
       inputValue: "",
-      isShown: false,
       currentIndex: null,
+      currentPage: 1,
+      nextPage: false,
       flag: false,
       values: [],
       hints: [],
-      chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-      },
     };
   },
 
@@ -83,7 +88,6 @@ export default {
     CardsHolder,
     Modal,
     InfoCard,
-
     Hints,
   },
   computed: {
@@ -107,20 +111,19 @@ export default {
     removeCard(payload) {
       console.log(payload, this.values);
       this.values = this.values.filter((item) => item != payload);
+      this.currentIndex = null;
+    },
+    hasNextPage(payload) {
+      this.nextPage = this.length > payload;
     },
     showGraph(index) {
-      console.log(index, this.currentIndex);
+      console.log(index);
       if (index != null) {
-        console.log(1);
         this.currentIndex = index;
-        this.isShown = true;
-      } else {
-        this.changeIsShown();
       }
     },
-    changeIsShown() {
-      this.currentIndex == null;
-      this.isShown = false;
+    closeModal() {
+      this.currentIndex = null;
     },
     addHint(name) {
       this.inputValue = name;
@@ -141,7 +144,7 @@ export default {
       this.flag = false;
     },
   },
-  created() {
+  async created() {
     this.$store.dispatch("getAllCoins");
   },
   unmounted() {
@@ -152,8 +155,8 @@ export default {
 </script>
 
 <style scoped>
-.left_col {
+/* .left_col {
   background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
-}
+} */
 </style>

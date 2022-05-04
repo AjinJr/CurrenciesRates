@@ -1,15 +1,15 @@
 <template>
-  <div class="left_col bg-white rounded-md border border-white w-full">
+  <div class="left_col rounded-md border border-white w-full">
     <div class="">
       <section class="grid gap-5 grid-cols-3 grid-rows-3 p-2">
         <InfoCard
-          v-for="(item, index) in cards"
+          v-for="(item, index) in getCurrentCards()"
           :key="index"
           :index="index"
           :item="item"
           @click="toggle(index)"
           @removeCard="removeCard"
-          @changeIsShown="changeIsShown"
+          @toggle="toggle"
           :class="{ 'border-orange-400': currentIndex === index }"
           class="shadow-lg"
         />
@@ -20,14 +20,13 @@
 
 <script>
 import InfoCard from "@/components/InfoCard.vue";
-import { mapGetters } from "vuex";
+
 import { mapState } from "vuex";
 
 export default {
   name: "CardsHolder",
   data() {
     return {
-      currentIndex: null,
       interval: null,
     };
   },
@@ -35,6 +34,14 @@ export default {
     inputValues: {
       type: Array,
       default: () => [],
+    },
+    currentIndex: {
+      type: Number,
+      default: null,
+    },
+    currentPage: {
+      type: Number,
+      default: null,
     },
   },
   components: {
@@ -54,21 +61,23 @@ export default {
         await this.$store.dispatch("getInfo", this.inputValues[i]);
       }
     },
+    getCurrentCards() {
+      const start = (this.currentPage - 1) * 9;
+      const end = this.currentPage * 9;
+      // console.log(this.cards.slice(start, end));
+      this.$emit("getNextPage", end);
+      return this.cards.slice(start, end);
+    },
     removeCard(payload) {
       this.$emit("removeCard", payload);
     },
-    changeIsShown() {
-      this.$emit("changeIsShown");
-      this.currentIndex = null;
-    },
+
     toggle(index) {
-      console.log(index, this.currentIndex);
       if (this.currentIndex == index) {
         this.currentIndex = null;
       } else {
-        this.currentIndex = index;
+        this.$emit("showGraph", index);
       }
-      this.$emit("showGraph", this.currentIndex);
     },
   },
   created() {

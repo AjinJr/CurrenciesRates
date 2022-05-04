@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center text-center p-2">
+  <div class="flex justify-center text-center pt-2">
     <div
       v-for="(hint, index) in names"
       :key="index"

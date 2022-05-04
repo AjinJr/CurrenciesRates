@@ -1,16 +1,13 @@
 <template>
   <div
-    class="border-2 grid grid-rows-3 rounded-md text-center p-2 cursor-pointer"
+    class="border-2 border-gray-800 bg-white grid grid-rows-3 rounded-md text-center p-2 cursor-pointer min-w-fit"
   >
     <button
-      class="max-w-fit justify-self-end border-2 p-2 hover:bg-gray-800 hover:text-orange-500 hover:border-orange-500"
-      @click.stop="removeCard()"
-      @click="changeValue"
+      class="max-w-fit justify-self-end border-2 border-gray-800 p-2 hover:bg-gray-800 hover:text-orange-500 hover:border-orange-500"
+      @click.stop="removeCard(), changeValue"
     >
-      x
+      <i class="fa-solid fa-xmark"></i>
     </button>
-    <!-- <h1>{{ cards[index - 1]["name"] }}</h1>
-    <h2>{{ cards[index - 1]["price"] }}</h2> -->
     <h1>{{ item["name"] }}</h1>
     <h2>{{ item["price"] }}</h2>
   </div>
@@ -41,11 +38,8 @@ export default {
       this.$store.commit("REMOVE_CARD", this.item["name"]);
     },
     changeValue() {
-      this.$emit("changeIsShown");
+      this.$emit("toggle", this.index);
     },
-    // async updateData() {
-    //   await this.$store.dispatch("getInfo", this.cards[this.index - 1]["name"]);
-    // },
   },
   created() {},
 

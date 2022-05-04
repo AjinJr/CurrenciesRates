@@ -1,5 +1,5 @@
 <template>
-  <canvas id="canvas" class="w-full h-full"> </canvas>
+  <canvas id="canvas" width="800" height="600"> </canvas>
 </template>
 <script>
 import { Line } from "vue-chartjs";

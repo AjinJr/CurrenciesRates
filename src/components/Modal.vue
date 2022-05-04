@@ -1,7 +1,9 @@
 <template>
   <section class="grid grid-row-2 text-center bg-white">
     <div class="flex flex-col justify-around">
-      <button class="self-end p-4 border rounded-md">x</button>
+      <button class="self-end p-4 border rounded-md" @click="closeModal">
+        x
+      </button>
       <h1 class="text-2xl font-bold">{{ cards[index]["name"] }}</h1>
       <!-- <p class="text-2xl font-medium">{{ cards[index]["price"] }}</p> -->
     </div>
@@ -38,17 +40,18 @@ export default {
         this.prices.splice(0, 1);
       }
     },
-    showPrices() {
-      const max = Math.max(...this.prices);
-      const min = Math.min(...this.prices);
-      let result = [];
-
-      this.prices.forEach((price) => {
-        result.push(5 + ((price - min) * 95) / (max + 1 - min));
-      });
-
-      return result;
+    closeModal() {
+      this.$emit("closeModal", this.index);
     },
+    // showPrices() {
+    //   const max = Math.max(...this.prices);
+    //   const min = Math.min(...this.prices);
+    //   let result = [];
+    //   this.prices.forEach((price) => {
+    //     result.push(5 + ((price - min) * 95) / (max + 1 - min));
+    //   });
+    //   return result;
+    // },
   },
   watch: {
     index() {
@@ -61,7 +64,6 @@ export default {
   unmounted() {
     this.prices = [];
     clearInterval(this.interval);
-    console.log(-1);
   },
 };
 </script>

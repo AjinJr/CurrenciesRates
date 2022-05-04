@@ -58,4 +58,49 @@ body {
   border-radius: 45%;
   transform: translate(56rem, 32rem);
 }
+
+@media (max-width: 1152px) {
+  #app::after {
+    position: absolute;
+    content: "";
+    width: 16rem;
+    height: 16rem;
+    background: linear-gradient(#2196f3, #31ff38);
+    border-radius: 45%;
+    transform: translate(40rem, 32rem);
+  }
+}
+@media (max-width: 895px) {
+  #app::after {
+    position: absolute;
+    content: "";
+    width: 16rem;
+    height: 16rem;
+    background: linear-gradient(#2196f3, #31ff38);
+    border-radius: 45%;
+    transform: translate(24rem, 32rem);
+  }
+}
+@media (max-width: 641px) {
+  #app::after {
+    width: 16rem;
+    height: 16rem;
+    border-radius: 45%;
+    transform: translate(18rem, 32rem);
+  }
+}
+@media (max-width: 641px) {
+  #app::after {
+    width: 16rem;
+    height: 16rem;
+    border-radius: 45%;
+    transform: translate(4rem, 32rem);
+  }
+  #app::before {
+    width: 20rem;
+    height: 20rem;
+    transform: translate(2rem, 2rem);
+    border-radius: 50%;
+  }
+}
 </style>

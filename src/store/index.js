@@ -3,6 +3,7 @@ import {getAllCoins} from '@/API/allCoins'
 import {getInfo} from '@/API/getCardInfo'
 import {getPaperMoney} from '@/API/getPaperValues'
 import {getPaperValue, getHistValue} from '@/API/getCurrentPaperValue'
+// import { values } from 'core-js/core/array'
 
 
 export default createStore({
@@ -10,7 +11,7 @@ export default createStore({
     cards: [], // info for cards 
     coins: [], // for all coins 
     currencies: [], // for paper money 
-    histValues: [],
+    histValues: {},
     value: {}
   },
   getters: {
@@ -27,6 +28,30 @@ export default createStore({
     }
   },
   mutations: {
+    FETCH_HIST(state){
+      state.histValues = {
+        data: [],
+        loading: true,
+        error: null,
+      };
+    },
+    FETCH_HIST_SUCCESS(state, payload){
+      state.histValues = {
+        data: payload,
+        loading: false,
+        error: null,
+      };
+      console.log(state.histValues)
+    },
+    FETCH_HIST_FAILURE(state, payload){
+      state.histValues = {
+        data: [],
+        loading: false,
+        error: payload,
+      };
+      console.log(state.histValues)
+    },
+
     SET_CARD(state, payload){
       for(let i = 0; i < state.cards.length; ++i){
         if(state.cards[i]['name'] === payload['name']){
@@ -47,10 +72,7 @@ export default createStore({
     SET_VALUE(state, payload){
       state.value = payload
     },
-    SET_HIST(state, payload){
-      state.histValues = payload
-      console.log(state.histValues)
-    },
+    
     REMOVE_CARD(state, payload){
         state.cards = state.cards.filter(( item) => item['name'] != payload)
     }, 
@@ -95,27 +117,26 @@ export default createStore({
 
     async getPaperValue({commit}, payload){
       try {
-        console.log(payload)
         const value = await getPaperValue(payload)
         const info = {'code': value.base_currency_code, 'name': value.base_currency_name, 'rates': value.rates[payload[1]].rate}
-        console.log(info)
         commit('SET_VALUE', info)
       } catch (error) {
         console.error(error)
       }
     }, 
     async getHistCurrency({commit}, payload){
-      console.log(payload)
+      commit('FETCH_HIST')
       try {
-        let result =[]
-        for(let i = 0; i < payload['dates'].length; ++i){
-          const value = await getHistValue(payload['dates'][i], payload['value'])
-          const info = {'date': value.updated_date, 'rates': value.rates.RUB.rate}
-          result.push(info)
-        }
-        commit('SET_HIST', result)
+        const promises = payload.dates.map(async (date) => {
+          const value = await getHistValue(date, payload.value)
+          const info = {'date' : value.updated_date, 'rates': value.rates.RUB.rate}
+          return info
+        })
+        const result = await Promise.all(promises)
+        
+        commit('FETCH_HIST_SUCCESS', result)
       } catch (error) {
-        console.error(error)
+        commit('FETCH_HIST_FAILURE')
       }
     }
   },

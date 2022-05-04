@@ -1,9 +1,9 @@
 <template>
   <div>
-    <nav class="flex justify-between align-center bg-transparent p-2">
-      <div>
+    <nav class="flex justify-center align-center bg-transparent p-2">
+      <!-- <div>
         <i class="fa-solid fa-shekel-sign fa-3x text-orange-500"></i>
-      </div>
+      </div> -->
       <div class="align-center self-center">
         <router-link
           to="/"
