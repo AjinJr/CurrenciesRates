@@ -30,8 +30,10 @@ body {
   position: relative;
   grid-template-rows: auto 1fr auto;
   min-height: 100%;
+  width: 100%;
   background: #161623;
   z-index: 1;
+  overflow-x: hidden;
 }
 .app {
 }

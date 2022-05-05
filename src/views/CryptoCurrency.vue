@@ -18,11 +18,11 @@
           <i class="fa fa-plus-square fa-lg"></i>
         </button>
         <br />
-        <label for="3" v-if="flag && values.length != 0" class="text-red-500"
-          >This card is already added</label
-        >
+        <p for="3" v-if="flag && values.length != 0" class="text-red-500">
+          This card is already added
+        </p>
         <Hints
-          v-if="inputValue.trim() != '' && values.length > 0"
+          v-if="inputValue.trim() != ''"
           :names="hints"
           @addCard="addHint"
         />
